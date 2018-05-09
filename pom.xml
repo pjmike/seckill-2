@@ -32,6 +32,11 @@
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
 
@@ -60,6 +65,15 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<resources>
+			<resource>
+				<!--   描述存放资源的目录，该路径相对POM路径-->
+				<directory>src/main/java/com/wizz/seckill</directory>
+				<includes>
+					<include>Mapper/*.xml</include>
+				</includes>
+			</resource>
+		</resources>
 	</build>
 
 

@@ -3,48 +3,15 @@ package com.wizz.seckill.Model;
 
 public class reqInfo {
 
-    private String name;
+    private String stuName;
     private String stuId;
     private String phoneNum;
-    //example : 2018/5/8 23:03 -> 201805082303
-    private Long time;
     //0 for success, 1 for fail
-    private int State;
+    private int state;
 
 
-    public reqInfo() {
-    }
-
-    public reqInfo(String name, String stuId, String phoneNum, Long time, int state) {
-        this.name = name;
-        this.stuId = stuId;
-        this.phoneNum = phoneNum;
-        this.time = time;
-        State = state;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getStuId() {
-        return stuId;
-    }
-
-    public String getPhoneNum() {
-        return phoneNum;
-    }
-
-    public Long getTime() {
-        return time;
-    }
-
-    public int getState() {
-        return State;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setStuName(String stuName) {
+        this.stuName = stuName;
     }
 
     public void setStuId(String stuId) {
@@ -55,11 +22,35 @@ public class reqInfo {
         this.phoneNum = phoneNum;
     }
 
-    public void setTime(Long time) {
-        this.time = time;
+    public void setState(int state) {
+        this.state = state;
     }
 
-    public void setState(int state) {
-        State = state;
+    public String getStuName() {
+
+        return stuName;
+    }
+
+    public String getStuId() {
+        return stuId;
+    }
+
+    public String getPhoneNum() {
+        return phoneNum;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+
+    public reqInfo() {
+    }
+
+    public reqInfo(String stuName, String stuId, String phoneNum, int state) {
+        this.stuName = stuName;
+        this.stuId = stuId;
+        this.phoneNum = phoneNum;
+        this.state = state;
     }
 }
