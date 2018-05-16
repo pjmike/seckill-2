@@ -28,7 +28,7 @@ class seckillController{
 
     private boolean firstTime = true;
     private Long sum = new Long(500);
-    private Long ipLimit = new Long(100000);
+    private Long ipLimit = new Long(12);
 
     @RequestMapping(value = "/tickets" , method = RequestMethod.POST)
     reqRes resHandler(HttpServletRequest request, @RequestBody Map<String, Object> params){
@@ -81,7 +81,7 @@ class seckillController{
         return new reqRes("true","");
     }
 
-    void initCache(){
+    private void initCache(){
         //sum 每次初始化为 总量 - 数据库余量
         cacheService.setCnt("curCnt",new Long(0));
     }
