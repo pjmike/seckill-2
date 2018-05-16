@@ -1,6 +1,5 @@
 package com.wizz.seckill.Controller;
 
-import com.wizz.seckill.Model.reqInfo;
 import com.wizz.seckill.Model.reqRes;
 import com.wizz.seckill.Mapper.reqInfoMapper;
 import com.wizz.seckill.Service.RedisService;
@@ -27,9 +26,9 @@ class seckillController{
     @Autowired
     private RedisService cacheService;
 
-    static boolean firstTime = true;
-    static Long sum = new Long(2);
-    static Long curCnt = new Long(0);
+    private boolean firstTime = true;
+    private Long sum = new Long(500);
+    private Long ipLimit = new Long(100000);
 
     @RequestMapping(value = "/tickets" , method = RequestMethod.POST)
     reqRes resHandler(HttpServletRequest request, @RequestBody Map<String, Object> params){
@@ -41,7 +40,7 @@ class seckillController{
 
         String phoneNum = (String)params.get("phoneNum");
         String stuId = (String)params.get("stuId");
-        String stuName = (String)params.get("name");
+        String stuName = (String)params.get("stuName");
         String ip = IpUtil.getIpAddr(request);
 
         logger.log(Level.INFO,"收到请求:" + "  : phoneNum = " + phoneNum
@@ -50,28 +49,34 @@ class seckillController{
 
 
         //合法性校验
+        Long ipCnt = cacheService.increment(ip);
+        if(ipCnt  >= ipLimit){
+            logger.log(Level.INFO, "丢弃请求: IP<" + ip + "> 请求次数过多 :" + ipCnt);
+            return new reqRes("false","too many ip requests");
+        }
+
         if(infomap.isDuplicatePhoneNum(phoneNum) != 0) {
             logger.log(Level.INFO,"丢弃请求, 手机号重复 : "
                     + phoneNum + "  due to duplication");
             return new reqRes("false","duplicate phoneNum");
         }
 
+        Long curCnt = cacheService.incrCnt("curCnt");
+        int state = curCnt >= sum ? 1 : 0;
 
-        //下面的都是有效数据
-        if(curCnt >= sum){
-            infomap.updateInfo(1, phoneNum, stuId, stuName);
-            logger.log(Level.INFO, "余额不足, 数据库中有  " + curCnt );
-            return new reqRes("false","Out of tickets");
-        }
+        infomap.updateInfo(state, phoneNum, stuId, stuName);
 
-
-        infomap.updateInfo(0, phoneNum, stuId, stuName);
-        curCnt = cacheService.incrCnt("curCnt");
-        logger.log(Level.INFO,"存储第< " +  curCnt + "> 条抢票成功记录"
+        logger.log(Level.INFO,"存储第< " +  curCnt + "> 条抢票记录"
                 + "  : phoneNum = " + phoneNum
                 + ",stuId = " + stuId
-                + ",name = " + stuName);
+                + ",name = " + stuName
+                +", result = " +  state);
 
+
+
+        if(curCnt >= sum){
+            return new reqRes("false","Out of tickets");
+        }
 
         return new reqRes("true","");
     }

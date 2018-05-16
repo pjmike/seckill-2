@@ -30,8 +30,9 @@ public class RedisService {
         return redisTemplate.opsForValue().increment(key,1);
     }
 
-    public Long get(String key){
-        return redisTemplate.opsForValue().get(key);
+    public Long getCnt(String key){
+        RedisAtomicLong entityIdCounter = new RedisAtomicLong(key, redisTemplate.getConnectionFactory());
+        return entityIdCounter.get();
     }
 
     public void delete(String key) {
