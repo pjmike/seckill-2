@@ -31,7 +31,7 @@ public class RedisService {
     }
 
     public Long get(String key){
-        return redisTemplate.opsForValue().get(key);
+        return (Long) redisTemplate.opsForValue().get(key);
     }
 
     public void delete(String key) {

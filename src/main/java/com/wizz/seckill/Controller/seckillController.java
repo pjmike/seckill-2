@@ -53,9 +53,9 @@ class seckillController{
         if(infomap.isDuplicatePhoneNum(phoneNum) != 0) {
             logger.log(Level.INFO,"丢弃请求, 手机号重复 : "
                     + phoneNum + "  due to duplication");
-            return new reqRes("false","duplicate phoneNum");
-        }
 
+        return new reqRes("false","duplicate phoneNum");
+    }
 
         //下面的都是有效数据
         if(curCnt >= sum){
