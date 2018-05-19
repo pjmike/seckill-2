@@ -58,7 +58,7 @@ class seckillController{
         if(infomap.isDuplicatePhoneNum(phoneNum) != 0) {
             logger.log(Level.INFO,"丢弃请求, 手机号重复 : "
                     + phoneNum + "  due to duplication");
-            
+            return new reqRes("false","duplicate phoneNum");
     }
         Long curCnt = cacheService.incrCnt("curCnt");
         int state = curCnt >= sum ? 1 : 0;

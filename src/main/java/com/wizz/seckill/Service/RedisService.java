@@ -40,4 +40,25 @@ public class RedisService {
     public void delete(String key) {
        redisTemplate.opsForValue().getOperations().delete(key);
     }
+
+    /**
+     * 实现命令：SET key value EX seconds，设置key-value和超时时间（秒）
+     *
+     * @param key
+     * @param value
+     * @param timeout
+     *            （以秒为单位）
+     */
+    public void set(String key, String value, long timeout) {
+        redisTemplate.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
+    }
+    /**
+     * 实现命令：TTL key，以秒为单位，返回给定 key的剩余生存时间(TTL, time to live)。
+     *
+     * @param key
+     * @return
+     */
+    public long ttl(String key) {
+        return redisTemplate.getExpire(key);
+    }
 }
