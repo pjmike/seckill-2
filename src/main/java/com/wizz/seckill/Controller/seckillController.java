@@ -1,20 +1,20 @@
 package com.wizz.seckill.Controller;
 
+import com.wizz.seckill.Mapper.actMapper;
+import com.wizz.seckill.Model.reqInfo;
 import com.wizz.seckill.Model.reqRes;
 import com.wizz.seckill.Mapper.reqInfoMapper;
 import com.wizz.seckill.Service.RedisService;
 import com.wizz.seckill.Util.IpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@CrossOrigin
 @RestController
 class seckillController{
 
@@ -24,19 +24,15 @@ class seckillController{
     private reqInfoMapper infomap;
 
     @Autowired
+    private actMapper actmap;
+
+    @Autowired
     private RedisService cacheService;
 
-    private boolean firstTime = true;
-    private Long sum = new Long(500);
-    private Long ipLimit = new Long(12);
+    private Long ipLimit = new Long(999999);
 
     @RequestMapping(value = "/tickets" , method = RequestMethod.POST)
     reqRes resHandler(HttpServletRequest request, @RequestBody Map<String, Object> params){
-
-        if(firstTime){
-            initCache();
-            firstTime = false;
-        }
 
         String phoneNum = (String)params.get("phoneNum");
         String stuId = (String)params.get("stuId");
@@ -52,7 +48,7 @@ class seckillController{
         Long ipCnt = cacheService.increment(ip);
         if(ipCnt  >= ipLimit){
             logger.log(Level.INFO, "丢弃请求: IP<" + ip + "> 请求次数过多 :" + ipCnt);
-            return new reqRes("false","too many ip requests");
+           return new reqRes("false","too many ip requests");
         }
 
         if(infomap.isDuplicatePhoneNum(phoneNum) != 0) {
@@ -61,6 +57,7 @@ class seckillController{
             return new reqRes("false","duplicate phoneNum");
         }
 
+        Long sum = Long.valueOf((String)cacheService.get("ticketsSum"));
         Long curCnt = cacheService.incrCnt("curCnt");
         int state = curCnt >= sum ? 1 : 0;
 
@@ -81,8 +78,9 @@ class seckillController{
         return new reqRes("true","");
     }
 
-    private void initCache(){
-        //sum 每次初始化为 总量 - 数据库余量
-        cacheService.setCnt("curCnt",new Long(0));
+    @RequestMapping(value = "/tickets" , method = RequestMethod.GET)
+    String sqlGet(){
+        return infomap.getResult().toString();
     }
+
 }

@@ -26,6 +26,11 @@
 
 	<dependencies>
 		<dependency>
+		<groupId>commons-httpclient</groupId>
+		<artifactId>commons-httpclient</artifactId>
+		<version>3.1</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
@@ -72,6 +77,19 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<!--JWT相关依赖-->
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>3.2.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -84,10 +102,8 @@
 		<resources>
 			<resource>
 				<!--   描述存放资源的目录，该路径相对POM路径-->
-				<directory>src/main/java/com/wizz/seckill</directory>
-				<includes>
-					<include>Mapper/*.xml</include>
-				</includes>
+				<directory>src/main/resources</directory>
+
 			</resource>
 		</resources>
 	</build>
