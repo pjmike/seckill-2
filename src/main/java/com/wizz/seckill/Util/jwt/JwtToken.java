@@ -3,8 +3,12 @@ package com.wizz.seckill.Util.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.wizz.seckill.exception.ObjectException;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
@@ -17,6 +21,7 @@ import java.util.Map;
  * @author pjmike
  * @create 2018-05-19 15:21
  **/
+@Slf4j
 public class JwtToken {
     /**
      * 加密所需盐
@@ -25,7 +30,7 @@ public class JwtToken {
     /**
      * 令牌过期时间5小时
      */
-    private static final Long TTLMILLS = 1000 * 60 * 60 * 5L;
+    private static final Long TTLMILLS = 1000*60*60*5L;
 
     public static String createToken(long userid) throws UnsupportedEncodingException {
         //当前系统时间
@@ -63,11 +68,18 @@ public class JwtToken {
      * @param token
      * @return
      */
-    public static boolean verifyTokenTime(String token) throws UnsupportedEncodingException {
+    public static boolean verifyTokenTime(String token) {
         //用加密方式
-        JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(SECRET)).build();
-        DecodedJWT jwt = jwtVerifier.verify(token);
-        Date expiration = jwt.getExpiresAt();
-        return expiration.before(new Date());
+        try {
+            JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(SECRET)).build();
+            DecodedJWT jwt = jwtVerifier.verify(token);
+            Date expiration = jwt.getExpiresAt();
+            return expiration.before(new Date());
+        } catch (TokenExpiredException e) {
+            log.info("The Token has expired");
+            return true;
+        } catch (Exception e) {
+            throw new ObjectException("Invalid Token");
+        }
     }
 }

@@ -61,4 +61,8 @@ public class RedisService {
     public long ttl(String key) {
         return redisTemplate.getExpire(key);
     }
+
+    public Object get(String key) {
+        return redisTemplate.opsForValue().get(key);
+    }
 }
