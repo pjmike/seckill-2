@@ -26,6 +26,11 @@
 
 	<dependencies>
 		<dependency>
+		<groupId>commons-httpclient</groupId>
+		<artifactId>commons-httpclient</artifactId>
+		<version>3.1</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
@@ -79,6 +84,7 @@
 			<version>1.16.20</version>
 			<scope>provided</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
@@ -95,6 +101,7 @@
 			<artifactId>fastjson</artifactId>
 			<version>1.2.47</version>
 		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -107,10 +114,8 @@
 		<resources>
 			<resource>
 				<!--   描述存放资源的目录，该路径相对POM路径-->
-				<directory>src/main/java/com/wizz/seckill</directory>
-				<includes>
-					<include>Mapper/*.xml</include>
-				</includes>
+				<directory>src/main/resources</directory>
+
 			</resource>
 		</resources>
 	</build>

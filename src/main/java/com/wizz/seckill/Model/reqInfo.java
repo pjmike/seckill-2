@@ -1,6 +1,8 @@
 package com.wizz.seckill.Model;
 
 
+import java.sql.Timestamp;
+
 public class reqInfo {
 
     private String stuName;
@@ -8,7 +10,7 @@ public class reqInfo {
     private String phoneNum;
     //0 for success, 1 for fail
     private int state;
-
+    private Timestamp time;
 
     public void setStuName(String stuName) {
         this.stuName = stuName;
@@ -52,5 +54,16 @@ public class reqInfo {
         this.stuId = stuId;
         this.phoneNum = phoneNum;
         this.state = state;
+    }
+
+    @Override
+    public String toString() {
+        return "reqInfo{" +
+                "stuName='" + stuName + '\'' +
+                ", stuId='" + stuId + '\'' +
+                ", phoneNum='" + phoneNum + '\'' +
+                ", state=" + state +
+                ", time=" + time +
+                '}';
     }
 }

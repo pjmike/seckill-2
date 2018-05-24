@@ -2,12 +2,9 @@ package com.wizz.seckill.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.support.atomic.RedisAtomicLong;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Repository
@@ -52,6 +49,8 @@ public class RedisService {
     public void set(String key, String value, long timeout) {
         redisTemplate.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
     }
+
+
     /**
      * 实现命令：TTL key，以秒为单位，返回给定 key的剩余生存时间(TTL, time to live)。
      *
@@ -61,6 +60,7 @@ public class RedisService {
     public long ttl(String key) {
         return redisTemplate.getExpire(key);
     }
+
 
     public Object get(String key) {
         return redisTemplate.opsForValue().get(key);

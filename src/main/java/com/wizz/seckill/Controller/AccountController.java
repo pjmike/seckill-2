@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,8 @@ import java.util.Map;
  * @author pjmike
  * @create 2018-05-19 15:05
  */
+
+@CrossOrigin
 @RestController
 public class AccountController {
     @Autowired
@@ -47,6 +50,7 @@ public class AccountController {
         SysUser user = userService.addSysUser(new SysUser(username, password));
         return new reqRes("true", String.valueOf(user.getId()));
     }
+
     /**
      * 登录
      *
@@ -72,7 +76,7 @@ public class AccountController {
         //生成jwt
         String token = JwtToken.createToken(user.getId());
         //将jwt放在redis中，设置jwt过期时间的两倍，即refresh刷新时间
-        long refreshTime = 600L;
+        long refreshTime = 36000L;
         redisService.set("JWT-" + user.getId(), token, refreshTime);
         //设置响应头
         response.setHeader("Authorization", token);

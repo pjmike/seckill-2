@@ -3,12 +3,15 @@ package com.wizz.seckill.Util.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.wizz.seckill.exception.ObjectException;
 import lombok.extern.slf4j.Slf4j;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
@@ -68,7 +71,7 @@ public class JwtToken {
      * @param token
      * @return
      */
-    public static boolean verifyTokenTime(String token) {
+    public static boolean verifyTokenTime(String token) throws UnsupportedEncodingException {
         //用加密方式
         try {
             JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(SECRET)).build();
@@ -81,5 +84,6 @@ public class JwtToken {
         } catch (Exception e) {
             throw new ObjectException("Invalid Token");
         }
+
     }
 }
