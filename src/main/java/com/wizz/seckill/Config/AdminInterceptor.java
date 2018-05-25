@@ -65,6 +65,7 @@ public class AdminInterceptor implements HandlerInterceptor {
             //再次验证token的用户userid和用户信息
             Map<String, Claim> map = JwtToken.verifyToken(authorization);
             Integer Id = map.get("userid").asInt();
+            log.info("用户的id：{}",Id);
             SysUser user = userService.findUserById(Id);
             if (user == null) {
                 throw new ObjectException("用户不存在");
