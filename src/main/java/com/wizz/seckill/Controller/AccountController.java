@@ -80,6 +80,8 @@ public class AccountController {
         redisService.set("JWT-" + user.getId(), token, refreshTime);
         //设置响应头
         response.setHeader("Authorization", token);
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addHeader("Access-Control-Expose-Headers","Authorization");
         return new reqRes("true", String.valueOf(user.getId()));
     }
 
